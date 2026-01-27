@@ -1,0 +1,45 @@
+import java.util.Random;
+
+class T extends Thread {
+    int[] a;
+    int s, e, sum = 0;
+
+    T(int[] a, int s, int e) {
+        this.a = a;
+        this.s = s;
+        this.e = e;
+    }
+
+    public void run() {
+        for (int i = s; i < e; i++)
+            sum += a[i];
+    }
+}
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+
+        int[] a = new int[1000];
+        Random r = new Random();
+
+        for (int i = 0; i < 1000; i++)
+            a[i] = r.nextInt(100);
+
+        T[] t = new T[10];
+
+        for (int i = 0; i < 10; i++) {
+            t[i] = new T(a, i * 100, (i + 1) * 100);
+            t[i].start();
+        }
+
+        int sum = 0;
+
+        for (int i = 0; i < 10; i++) {
+            t[i].join();
+            sum += t[i].sum;
+        }
+
+        System.out.println("Sum = " + sum);
+        System.out.println("Average = " + (sum / 1000.0));
+    }
+}

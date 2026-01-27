@@ -1,0 +1,40 @@
+import java.util.Random;
+
+class Generator extends Thread {
+    public void run() {
+        Random r = new Random();
+        while (true) {
+            int n = r.nextInt(10);
+            System.out.println("Generated: " + n);
+
+            if (n % 2 == 0)
+                new Square(n).start();
+            else
+                new Cube(n).start();
+
+            try { Thread.sleep(1000); } catch (Exception e) {}
+        }
+    }
+}
+
+class Square extends Thread {
+    int n;
+    Square(int n) { this.n = n; }
+    public void run() {
+        System.out.println("Square: " + (n * n));
+    }
+}
+
+class Cube extends Thread {
+    int n;
+    Cube(int n) { this.n = n; }
+    public void run() {
+        System.out.println("Cube: " + (n * n * n));
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        new Generator().start();
+    }
+}

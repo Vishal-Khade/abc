@@ -1,0 +1,45 @@
+import java.io.*;
+
+class SearchThread extends Thread {
+    File file;
+    String key;
+
+    SearchThread(File file, String key) {
+        this.file = file;
+        this.key = key;
+    }
+
+    public void run() {
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line;
+            int lineNo = 1;
+
+            while ((line = br.readLine()) != null) {
+                if (line.contains(key)) {
+                    System.out.println(file.getName() + " : line " + lineNo);
+                }
+                lineNo++;
+            }
+            br.close();
+        } catch (Exception e) {}
+    }
+}
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        System.out.print("Enter string to search: ");
+        String key = in.readLine();
+
+        File folder = new File(".");
+        File[] files = folder.listFiles();
+
+        for (File f : files) {
+            if (f.isFile() && f.getName().endsWith(".txt")) {
+                new SearchThread(f, key).start();
+            }
+        }
+    }
+}
